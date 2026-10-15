@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block titulo %}DataHub{% endblock %}
+    </title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background-color: #f5f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .data-card {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-card {
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-size: 2.3rem;
+            font-weight: 700;
+        }
+
+        .page-title {
+            font-weight: 700;
+        }
+
+        .table {
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            white-space: nowrap;
+        }
+
+        .dataset-name {
+            font-weight: 600;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 10px;
+        }
+
+        .btn {
+            border-radius: 9px;
+        }
+
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        footer {
+            margin-top: 70px;
+            padding: 25px 0;
+            color: #6c757d;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+
+        <a
+            class="navbar-brand"
+            href="{% url 'home' %}"
+        >
+            📊 DataHub
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarDataHub"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+            class="collapse navbar-collapse"
+            id="navbarDataHub"
+        >
+
+            <div class="navbar-nav ms-auto">
+
+                <a
+                    class="nav-link"
+                    href="{% url 'home' %}"
+                >
+                    Início
+                </a>
+
+                <a
+                    class="nav-link"
+                    href="{% url 'categoria_lista' %}"
+                >
+                    Categorias
+                </a>
+
+                <a
+                    class="nav-link"
+                    href="{% url 'dataset_lista' %}"
+                >
+                    Datasets
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+
+<main class="container page-container">
+
+    {% block conteudo %}
+    {% endblock %}
+
+</main>
+
+
+<footer>
+    DataHub • Catálogo de Dados
+</footer>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+>
+</script>
+
+</body>
+
+</html>

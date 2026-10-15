@@ -1,0 +1,180 @@
+{% extends "catalogo/base.html" %}
+
+{% block titulo %}
+Início | DataHub
+{% endblock %}
+
+
+{% block conteudo %}
+
+<div class="mb-5">
+
+    <h1 class="page-title">
+        Catálogo de Dados
+    </h1>
+
+    <p class="text-secondary fs-5">
+        Organize, catalogue e encontre seus datasets
+        em um único lugar.
+    </p>
+
+</div>
+
+
+<div class="row g-4">
+
+    <div class="col-md-6">
+
+        <div class="card data-card stat-card h-100">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <p class="text-secondary mb-1">
+                            Categorias cadastradas
+                        </p>
+
+                        <div class="stat-number">
+                            {{ quantidade_categorias }}
+                        </div>
+
+                    </div>
+
+                    <div class="fs-1">
+                        🗂️
+                    </div>
+
+                </div>
+
+                <a
+                    href="{% url 'categoria_lista' %}"
+                    class="btn btn-outline-dark mt-4"
+                >
+                    Gerenciar categorias
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <div class="card data-card stat-card h-100">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <p class="text-secondary mb-1">
+                            Datasets cadastrados
+                        </p>
+
+                        <div class="stat-number">
+                            {{ quantidade_datasets }}
+                        </div>
+
+                    </div>
+
+                    <div class="fs-1">
+                        🗃️
+                    </div>
+
+                </div>
+
+                <a
+                    href="{% url 'dataset_lista' %}"
+                    class="btn btn-dark mt-4"
+                >
+                    Explorar datasets
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card data-card mt-4">
+
+    <div class="card-body p-4">
+
+        <h4 class="fw-bold">
+            Sobre o DataHub
+        </h4>
+
+        <p class="text-secondary mb-0">
+            O DataHub permite organizar conjuntos de dados
+            por categoria, origem, formato e data de atualização.
+            Também é possível associar arquivos aos datasets
+            cadastrados.
+        </p>
+
+    </div>
+
+</div>
+
+
+{% if datasets_recentes %}
+
+<div class="card data-card mt-4">
+
+    <div class="card-body p-4">
+
+        <h4 class="fw-bold mb-4">
+            Datasets recentes
+        </h4>
+
+        <div class="list-group list-group-flush">
+
+            {% for dataset in datasets_recentes %}
+
+            <div
+                class="
+                    list-group-item
+                    px-0
+                    d-flex
+                    justify-content-between
+                    align-items-center
+                "
+            >
+
+                <div>
+
+                    <div class="fw-semibold">
+                        {{ dataset.nome }}
+                    </div>
+
+                    <small class="text-secondary">
+                        {{ dataset.categoria }}
+                    </small>
+
+                </div>
+
+                <span class="badge text-bg-dark">
+                    {{ dataset.get_formato_display }}
+                </span>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
