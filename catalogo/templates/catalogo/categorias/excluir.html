@@ -1,31 +1,70 @@
 {% extends "catalogo/base.html" %}
 
+{% block titulo %}
+Excluir Categoria | DataHub
+{% endblock %}
+
+
 {% block conteudo %}
 
-<h1>Excluir categoria</h1>
+<div class="row justify-content-center">
 
-<p>
-    Tem certeza de que deseja excluir
-    <strong>{{ categoria.nome }}</strong>?
-</p>
+    <div class="col-lg-6">
 
-<form method="POST">
+        <div class="card data-card">
 
-    {% csrf_token %}
+            <div class="card-body p-4">
 
-    <button
-        class="botao perigo"
-        type="submit"
-    >
-        Excluir
-    </button>
+                <div class="fs-1 mb-3">
+                    ⚠️
+                </div>
 
-</form>
+                <h2 class="fw-bold">
+                    Excluir Categoria
+                </h2>
 
-<br>
+                <p class="text-secondary">
+                    Você está prestes a excluir:
+                </p>
 
-<a href="{% url 'categoria_lista' %}">
-    Cancelar
-</a>
+                <div class="alert alert-light border">
+                    <strong>
+                        {{ categoria.nome }}
+                    </strong>
+                </div>
+
+                <p>
+                    Esta ação também excluirá os datasets
+                    relacionados a esta categoria e não poderá
+                    ser desfeita.
+                </p>
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                    >
+                        Confirmar exclusão
+                    </button>
+
+                    <a
+                        href="{% url 'categoria_lista' %}"
+                        class="btn btn-outline-secondary"
+                    >
+                        Cancelar
+                    </a>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

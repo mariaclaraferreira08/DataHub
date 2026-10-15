@@ -6,11 +6,15 @@ from .models import Categoria, Dataset
 class CategoriaForm(forms.ModelForm):
     class Meta:
         model = Categoria
-
         fields = [
             "nome",
             "descricao",
         ]
+
+        labels = {
+            "nome": "Nome",
+            "descricao": "Descrição",
+        }
 
         widgets = {
             "nome": forms.TextInput(
@@ -19,7 +23,6 @@ class CategoriaForm(forms.ModelForm):
                     "placeholder": "Nome da categoria",
                 }
             ),
-
             "descricao": forms.Textarea(
                 attrs={
                     "class": "form-control",
@@ -33,7 +36,6 @@ class CategoriaForm(forms.ModelForm):
 class DatasetForm(forms.ModelForm):
     class Meta:
         model = Dataset
-
         fields = [
             "nome",
             "descricao",
@@ -44,6 +46,16 @@ class DatasetForm(forms.ModelForm):
             "arquivo",
         ]
 
+        labels = {
+            "nome": "Nome",
+            "descricao": "Descrição",
+            "formato": "Formato",
+            "origem": "Origem",
+            "categoria": "Categoria",
+            "data_atualizacao": "Data de atualização",
+            "arquivo": "Arquivo",
+        }
+
         widgets = {
             "nome": forms.TextInput(
                 attrs={
@@ -51,7 +63,6 @@ class DatasetForm(forms.ModelForm):
                     "placeholder": "Nome do dataset",
                 }
             ),
-
             "descricao": forms.Textarea(
                 attrs={
                     "class": "form-control",
@@ -59,33 +70,28 @@ class DatasetForm(forms.ModelForm):
                     "placeholder": "Descrição do dataset",
                 }
             ),
-
             "formato": forms.Select(
                 attrs={
                     "class": "form-select",
                 }
             ),
-
             "origem": forms.TextInput(
                 attrs={
                     "class": "form-control",
                     "placeholder": "Origem dos dados",
                 }
             ),
-
             "categoria": forms.Select(
                 attrs={
                     "class": "form-select",
                 }
             ),
-
             "data_atualizacao": forms.DateInput(
                 attrs={
                     "class": "form-control",
                     "type": "date",
                 }
             ),
-
             "arquivo": forms.ClearableFileInput(
                 attrs={
                     "class": "form-control",
@@ -121,10 +127,7 @@ class DatasetForm(forms.ModelForm):
         if formato == "OUTRO":
             return cleaned_data
 
-        extensoes_validas = extensoes_permitidas.get(
-            formato,
-            []
-        )
+        extensoes_validas = extensoes_permitidas.get(formato, [])
 
         arquivo_valido = any(
             nome_arquivo.endswith(extensao)

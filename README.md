@@ -4,6 +4,8 @@ O **DataHub** é uma aplicação web para cadastrar, organizar e encontrar datas
 
 A versão atual, **vAlpha**, já permite organizar datasets por categoria, pesquisar e filtrar registros, anexar arquivos e validar se a extensão enviada corresponde ao formato selecionado.
 
+O projeto começou como uma atividade com Django, mas a ideia é continuar desenvolvendo o DataHub aos poucos e transformá-lo em um projeto mais completo relacionado à Engenharia de Dados.
+
 ---
 
 ## Screenshots
@@ -20,10 +22,9 @@ A versão atual, **vAlpha**, já permite organizar datasets por categoria, pesqu
 
 ![Tela de datasets](docs/images/datasets.png)
 
-### Cadastro de Dataset
+### Novo Dataset
 
-![Formulário de cadastro](docs/images/novo_dataset.png)
-
+![Formulário de cadastro de dataset](docs/images/novo_dataset.png)
 
 ---
 
@@ -65,7 +66,7 @@ Categoria: Vendas
 Atualização: 10/10/2026
 ```
 
-A ideia do DataHub é facilitar justamente esse tipo de organização: saber **quais dados existem, de onde vieram, em qual formato estão e onde encontrá-los**.
+A ideia do projeto é facilitar esse tipo de organização: saber **quais dados existem, de onde vieram, em qual formato estão e onde encontrá-los**.
 
 ---
 
@@ -73,12 +74,14 @@ A ideia do DataHub é facilitar justamente esse tipo de organização: saber **q
 
 Atualmente o DataHub possui:
 
-- CRUD completo de categorias e datasets;
+- CRUD completo de categorias;
+- CRUD completo de datasets;
 - relacionamento entre Categoria e Dataset com `ForeignKey`;
 - upload de arquivos;
 - validação da extensão do arquivo;
 - pesquisa por nome;
-- filtro por categoria e formato;
+- filtro por categoria;
+- filtro por formato;
 - dashboard com quantidade de categorias e datasets;
 - listagem dos datasets cadastrados recentemente;
 - interface responsiva com Bootstrap.
@@ -138,38 +141,45 @@ Data de atualização: 13/10/2026
 
 ## Formatos aceitos
 
-O DataHub permite catalogar diferentes tipos de arquivo.
-
 | Formato | Extensão | Uso comum |
 |---|---|---|
-| CSV | `.csv` | Dados em linhas e colunas. É simples e muito comum para troca de dados. |
+| CSV | `.csv` | Dados em linhas e colunas. |
 | JSON | `.json` | Dados estruturados, muito usado em APIs e aplicações web. |
 | Excel | `.xlsx` | Planilhas do Excel. |
 | Excel legado | `.xls` | Formato mais antigo de planilhas do Excel. |
-| SQL | `.sql` | Scripts, comandos SQL ou exportações de bancos de dados. |
+| SQL | `.sql` | Scripts SQL ou exportações de banco de dados. |
 | TXT | `.txt` | Arquivos de texto simples. |
 | XML | `.xml` | Dados estruturados em tags. |
-| Parquet | `.parquet` | Formato colunar eficiente, bastante usado no processamento de grandes volumes de dados. |
-| Avro | `.avro` | Formato usado principalmente para troca e processamento de dados em sistemas distribuídos. |
-| TSV | `.tsv` | Parecido com CSV, mas usa tabulações para separar os valores. |
-| YAML | `.yaml` / `.yml` | Muito usado para arquivos de configuração, inclusive de pipelines e ferramentas de dados. |
-| Outro | — | Para arquivos que não estejam entre as opções anteriores. |
+| Parquet | `.parquet` | Formato colunar eficiente, muito usado em Engenharia de Dados. |
+| Avro | `.avro` | Serialização e troca de dados em sistemas distribuídos. |
+| TSV | `.tsv` | Parecido com CSV, mas usa tabulações. |
+| YAML | `.yaml` / `.yml` | Muito usado em arquivos de configuração. |
+| Outro | — | Para arquivos fora das opções anteriores. |
 
+### XML
+
+O **XML (eXtensible Markup Language)** é um formato de texto usado para armazenar e trocar dados estruturados por meio de tags.
+
+Exemplo:
+
+```xml
+<dataset>
+    <nome>Vendas 2026</nome>
+    <origem>Sistema ERP</origem>
+    <categoria>Vendas</categoria>
+</dataset>
+```
 ### Parquet
 
-O **Parquet** é bastante utilizado em Engenharia de Dados porque armazena os dados de forma colunar.
-
-Em vez de ser apenas um arquivo de texto como CSV, ele é otimizado para leitura e processamento, especialmente quando existem grandes volumes de dados.
+O **Parquet** utiliza armazenamento colunar e é muito usado para processamento de grandes volumes de dados.
 
 ### Avro
 
-O **Avro** é um formato voltado para serialização e troca de dados.
-
-É comum em sistemas distribuídos, principalmente quando diferentes aplicações ou serviços precisam enviar dados entre si.
+O **Avro** é um formato de serialização bastante utilizado em sistemas distribuídos.
 
 ### TSV
 
-O **TSV** é parecido com CSV, mas muda a forma de separar os valores.
+O **TSV** é parecido com CSV, mas utiliza tabulações como separador.
 
 ```text
 CSV:
@@ -179,13 +189,11 @@ TSV:
 nome    idade    cidade
 ```
 
-No TSV, as colunas são separadas por tabulação.
-
 ### YAML
 
 O **YAML** costuma ser usado principalmente em arquivos de configuração.
 
-Por exemplo, uma configuração simples de pipeline poderia ser:
+Exemplo:
 
 ```yaml
 pipeline:
@@ -228,7 +236,7 @@ Durante o desenvolvimento, os arquivos enviados ficam armazenados em:
 media/datasets/
 ```
 
-A pasta `media/` não é enviada para o GitHub.
+A pasta `media/` é ignorada pelo Git e não é enviada para o GitHub.
 
 ---
 
@@ -236,7 +244,7 @@ A pasta `media/` não é enviada para o GitHub.
 
 A listagem de datasets possui busca pelo nome e filtros por categoria e formato.
 
-É possível, por exemplo, procurar:
+Exemplo:
 
 ```text
 Nome: vendas
@@ -275,11 +283,11 @@ categoria = models.ForeignKey(
 )
 ```
 
-Usei `CASCADE`, então, se uma categoria for removida, os datasets relacionados a ela também são removidos.
+O `CASCADE` faz com que, ao excluir uma categoria, os datasets relacionados a ela também sejam removidos.
 
 ---
 
-## Como o projeto está organizado
+## Arquitetura MTV
 
 O DataHub segue o padrão MTV do Django:
 
@@ -294,7 +302,7 @@ Template
 → interface exibida no navegador
 ```
 
-O fluxo simplificado é:
+Fluxo simplificado:
 
 ```text
 Usuário
@@ -331,7 +339,7 @@ GitHub
 
 ---
 
-## Estrutura
+## Estrutura do projeto
 
 ```text
 DataHub/
@@ -366,22 +374,20 @@ DataHub/
 │   ├── asgi.py
 │   └── wsgi.py
 │
+├── docs/
+│   └── images/
+│       ├── categorias.png
+│       ├── dashboard.png
+│       ├── datasets.png
+│       └── novo_dataset.png
+│
 ├── .gitignore
 ├── manage.py
 ├── requirements.txt
 └── README.md
 ```
 
-> `datahub/local_settings.py` existe apenas localmente e não é enviado para o GitHub.
-
-Alguns arquivos e diretórios locais ignorados pelo Git:
-
-```text
-.venv/
-media/
-datahub/local_settings.py
-__pycache__/
-```
+> `datahub/local_settings.py` existe apenas localmente e não faz parte do repositório.
 
 ---
 
@@ -390,7 +396,7 @@ __pycache__/
 Clone o repositório:
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/mariaclaraferreira08/DataHubURL_DO_REPOSITORIO
 cd DataHub
 ```
 
@@ -421,9 +427,9 @@ CREATE DATABASE datahub
 CHARACTER SET utf8mb4;
 ```
 
-### Senha do MySQL
+### Configurações locais
 
-Por segurança, a senha do MySQL não fica salva no repositório.
+Por segurança, a senha do MySQL e a `SECRET_KEY` do Django não ficam armazenadas no repositório.
 
 Crie o arquivo:
 
@@ -435,14 +441,30 @@ com:
 
 ```python
 DB_PASSWORD = "sua_senha_do_mysql"
+SECRET_KEY = "sua_secret_key"
 ```
 
-Esse arquivo está incluído no `.gitignore`, então não será enviado para o GitHub.
+Para gerar uma nova `SECRET_KEY`, execute:
 
-Depois execute:
+```powershell
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+Copie a chave gerada para `local_settings.py`.
+
+Esse arquivo está incluído no `.gitignore` e não é enviado para o GitHub.
+
+---
+
+## Executando as migrations
 
 ```powershell
 python manage.py migrate
+```
+
+Depois inicie o servidor:
+
+```powershell
 python manage.py runserver
 ```
 
@@ -464,7 +486,7 @@ http://127.0.0.1:8000/
 | Datasets | `/datasets/` |
 | Novo dataset | `/datasets/novo/` |
 
-As rotas de edição e exclusão usam o ID do registro:
+As rotas de edição e exclusão utilizam o ID do registro:
 
 ```text
 /datasets/3/editar/
@@ -475,15 +497,12 @@ As rotas de edição e exclusão usam o ID do registro:
 
 ## Próximos passos
 
-A versão atual ainda é o começo do projeto.
-
-Algumas melhorias que quero explorar depois são:
+Algumas melhorias que quero explorar futuramente:
 
 - preview de arquivos CSV, Excel e JSON;
 - análise de datasets com Pandas;
 - quantidade de linhas e colunas;
-- detecção de valores nulos;
-- detecção de registros duplicados;
+- detecção de valores nulos e registros duplicados;
 - indicadores de qualidade de dados;
 - dashboard com gráficos;
 - autenticação;
@@ -492,7 +511,7 @@ Algumas melhorias que quero explorar depois são:
 - armazenamento em nuvem;
 - Docker.
 
-Uma possível evolução seria:
+Uma possível evolução:
 
 ```text
 DataHub vAlpha ✓
@@ -518,7 +537,7 @@ API + Cloud
 
 ## O que pratiquei com esse projeto
 
-O projeto me ajudou a praticar principalmente:
+O projeto me ajudou a praticar:
 
 ```text
 Modelagem de dados
@@ -551,4 +570,4 @@ Estudante de **Análise e Desenvolvimento de Sistemas**.
 
 **Funcional e em desenvolvimento.**
 
-A versão atual possui CRUD de Categorias e Datasets, MySQL, upload e validação de arquivos, busca, filtros e dashboard.
+A versão atual possui CRUD de Categorias e Datasets, integração com MySQL, upload e validação de arquivos, busca, filtros e dashboard.
