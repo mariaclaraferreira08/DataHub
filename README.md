@@ -4,8 +4,6 @@ O **DataHub** é uma aplicação web para cadastrar, organizar e encontrar datas
 
 A versão atual, **vAlpha**, já permite organizar datasets por categoria, pesquisar e filtrar registros, anexar arquivos e validar se a extensão enviada corresponde ao formato selecionado.
 
-O projeto começou como uma atividade com Django, mas a ideia é continuar desenvolvendo o DataHub aos poucos e transformá-lo em um projeto mais completo relacionado à Engenharia de Dados.
-
 ---
 
 ## Screenshots
@@ -169,29 +167,60 @@ Exemplo:
     <categoria>Vendas</categoria>
 </dataset>
 ```
+
 ### Parquet
 
 O **Parquet** utiliza armazenamento colunar e é muito usado para processamento de grandes volumes de dados.
+
+Exemplo de representação dos dados:
+
+```text
+nome       idade    cidade
+Ana        22       São Paulo
+Carlos     28       Rio de Janeiro
+Mariana    25       Fortaleza
+```
+
+O Parquet é um formato binário que organiza os dados internamente por colunas, facilitando consultas e análises eficientes.
 
 ### Avro
 
 O **Avro** é um formato de serialização bastante utilizado em sistemas distribuídos.
 
+Exemplo de esquema Avro em JSON:
+
+```json
+{
+    "type": "record",
+    "name": "Pessoa",
+    "fields": [
+        {"name": "nome", "type": "string"},
+        {"name": "idade", "type": "int"},
+        {"name": "cidade", "type": "string"}
+    ]
+}
+```
+
+O esquema define a estrutura dos dados que serão armazenados ou transmitidos. Os arquivos Avro geralmente utilizam codificação binária.
+
 ### TSV
 
-O **TSV** é parecido com CSV, mas utiliza tabulações como separador.
+O **TSV (Tab-Separated Values)** é parecido com CSV, mas utiliza tabulações como separador.
 
-```text
-CSV:
-nome,idade,cidade
+Exemplo:
 
-TSV:
-nome    idade    cidade
+```tsv
+nome	idade	cidade
+Ana	22	São Paulo
+Carlos	28	Rio de Janeiro
+Mariana	25	Fortaleza
 ```
+
+No TSV, os valores são separados por tabulações, enquanto no CSV geralmente são separados por vírgulas.
 
 ### YAML
 
-O **YAML** costuma ser usado principalmente em arquivos de configuração.
+O **YAML (YAML Ain't Markup Language)** costuma ser usado principalmente em arquivos de configuração.
 
 Exemplo:
 
@@ -200,8 +229,13 @@ pipeline:
   nome: vendas
   origem: sistema_erp
   formato: csv
+  ativo: true
+  configuracoes:
+    separador: ","
+    cabecalho: true
 ```
 
+O YAML utiliza indentação para organizar informações hierárquicas, facilitando a leitura e a manutenção de configurações.
 ---
 
 ## Upload e validação de arquivos
@@ -396,7 +430,7 @@ DataHub/
 Clone o repositório:
 
 ```bash
-git clone https://github.com/mariaclaraferreira08/DataHubURL_DO_REPOSITORIO
+git clone [https://github.com/mariaclaraferreira08/DataHubURL_DO_REPOSITORIO](https://github.com/mariaclaraferreira08/DataHub)
 cd DataHub
 ```
 
