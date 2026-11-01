@@ -430,7 +430,7 @@ DataHub/
 Clone o repositório:
 
 ```bash
-git clone [https://github.com/mariaclaraferreira08/DataHubURL_DO_REPOSITORIO](https://github.com/mariaclaraferreira08/DataHub)
+git clone [https://github.com/mariaclaraferreira08/DataHub.git](https://github.com/mariaclaraferreira08/DataHub.git)
 cd DataHub
 ```
 
