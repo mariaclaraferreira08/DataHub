@@ -31,7 +31,7 @@ except ImportError:
 # SECRET_KEY is loaded from local_settings.py.
 
 # SECURITY WARNING: don't run with debug turned on in production!
-SECRET_KEY = 'django-insecure-uma-chave-qualquer-so-para-desenvolvimento'
+from .local_settings import SECRET_KEY
 DEBUG = True
 
 ALLOWED_HOSTS = []
