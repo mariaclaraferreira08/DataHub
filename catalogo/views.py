@@ -6,12 +6,12 @@ from django.shortcuts import (
 
 from .models import Categoria, Dataset
 from .forms import CategoriaForm, DatasetForm
-
+from django.contrib.auth.decorators import login_required
 
 # =====================================================
 # HOME
 # =====================================================
-
+@login_required(login_url='users:signin')
 def home(request):
     quantidade_categorias = Categoria.objects.count()
     quantidade_datasets = Dataset.objects.count()
@@ -34,7 +34,7 @@ def home(request):
 # =====================================================
 # CATEGORIAS
 # =====================================================
-
+@login_required(login_url='users:signin')
 def categoria_lista(request):
     categorias = Categoria.objects.all().order_by("nome")
 
@@ -46,7 +46,7 @@ def categoria_lista(request):
         },
     )
 
-
+@login_required(login_url='users:signin')
 def categoria_criar(request):
     if request.method == "POST":
         form = CategoriaForm(request.POST)
@@ -67,7 +67,7 @@ def categoria_criar(request):
         },
     )
 
-
+@login_required(login_url='users:signin')
 def categoria_editar(request, id):
     categoria = get_object_or_404(
         Categoria,
@@ -98,7 +98,7 @@ def categoria_editar(request, id):
         },
     )
 
-
+@login_required(login_url='users:signin')
 def categoria_excluir(request, id):
     categoria = get_object_or_404(
         Categoria,
@@ -121,7 +121,7 @@ def categoria_excluir(request, id):
 # =====================================================
 # DATASETS
 # =====================================================
-
+@login_required(login_url='users:signin')
 def dataset_lista(request):
     datasets = Dataset.objects.select_related(
         "categoria"
@@ -179,7 +179,7 @@ def dataset_lista(request):
         contexto,
     )
 
-
+@login_required(login_url='users:signin')
 def dataset_criar(request):
     if request.method == "POST":
         form = DatasetForm(
@@ -203,7 +203,7 @@ def dataset_criar(request):
         },
     )
 
-
+@login_required(login_url='users:signin')
 def dataset_editar(request, id):
     dataset = get_object_or_404(
         Dataset,
@@ -236,7 +236,7 @@ def dataset_editar(request, id):
         },
     )
 
-
+@login_required(login_url='users:signin')
 def dataset_excluir(request, id):
     dataset = get_object_or_404(
         Dataset,

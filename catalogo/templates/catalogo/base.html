@@ -128,41 +128,64 @@
             id="navbarDataHub"
         >
 
-            <div class="navbar-nav ms-auto">
+            <div class="navbar-nav me-auto">
 
-                <a
-                    class="nav-link"
-                    href="{% url 'home' %}"
-                >
+                <a class="nav-link" href="{% url 'home' %}">
                     Início
                 </a>
 
-                <a
-                    class="nav-link"
-                    href="{% url 'categoria_lista' %}"
-                >
+                <a class="nav-link" href="{% url 'categoria_lista' %}">
                     Categorias
                 </a>
 
-                <a
-                    class="nav-link"
-                    href="{% url 'dataset_lista' %}"
-                >
+                <a class="nav-link" href="{% url 'dataset_lista' %}">
                     Datasets
                 </a>
 
             </div>
 
+            {% if user.is_authenticated %}
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <span class="text-white">
+                        Olá, {{ user.first_name|default:user.username }}!
+                    </span>
+
+                    <form
+                        method="POST"
+                        action="{% url 'users:signout' %}"
+                    >
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn btn-outline-light btn-sm"
+                        >
+                            Sair
+                        </button>
+
+                    </form>
+
+                </div>
+
+            {% endif %}
+
         </div>
     </div>
 </nav>
 
-
-<main class="container page-container">
-
+<main class='container page-container'>
+    {% if messages %}
+        {% for message in messages %}
+            <div class='alert {% if message.tags == "error" %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show' role='alert'>
+                {{ message }}
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Fechar'></button>
+            </div>
+        {% endfor %}
+    {% endif %}
     {% block conteudo %}
     {% endblock %}
-
 </main>
 
 
