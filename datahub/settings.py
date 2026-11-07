@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from .local_settings import (
+    SECRET_KEY,
+    DB_PASSWORD,
+    BREVO_API_KEY,
+    DEFAULT_FROM_EMAIL,
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,7 +37,7 @@ except ImportError:
 # SECRET_KEY is loaded from local_settings.py.
 
 # SECURITY WARNING: don't run with debug turned on in production!
-SECRET_KEY = 'django-insecure-uma-chave-qualquer-so-para-desenvolvimento'
+from .local_settings import SECRET_KEY
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -48,6 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'catalogo',
+    'users',
+    'anymail'
 ]
 
 MIDDLEWARE = [
@@ -65,7 +73,7 @@ ROOT_URLCONF = 'datahub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -142,3 +150,16 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Login
+
+LOGIN_URL = 'users:signin'
+
+# Email verificatiaon
+
+EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
+
+ANYMAIL = {
+    'BREVO_API_KEY' : BREVO_API_KEY,
+
+    'DEFAULT_FROM_EMAIL' : DEFAULT_FROM_EMAIL,
+}
