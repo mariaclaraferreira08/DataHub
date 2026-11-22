@@ -1,8 +1,10 @@
 # DataHub 📊
 
-O **DataHub** é uma aplicação web para cadastrar, organizar e encontrar datasets de forma simples.
+O **DataHub** é uma aplicação web desenvolvida para cadastrar, organizar e encontrar datasets de forma simples.
 
-A versão atual, **vAlpha**, já permite organizar datasets por categoria, pesquisar e filtrar registros, anexar arquivos e validar se a extensão enviada corresponde ao formato selecionado.
+A versão atual, **vAlpha**, permite organizar datasets por categoria, pesquisar e filtrar registros, anexar arquivos e validar se a extensão enviada corresponde ao formato selecionado. O projeto também possui autenticação de usuários e controle de acesso às páginas do catálogo.
+
+O objetivo é desenvolver, gradualmente, uma aplicação que facilite a organização e o gerenciamento de conjuntos de dados.
 
 ---
 
@@ -32,12 +34,12 @@ Um **dataset** é, de forma simples, um conjunto de dados relacionados.
 
 Pode ser, por exemplo:
 
-- uma planilha com vendas;
-- um CSV com clientes;
-- um JSON recebido de uma API;
-- dados de funcionários;
-- registros de estoque;
-- resultados de uma pesquisa.
+- Uma planilha com vendas;
+- Um CSV com clientes;
+- Um JSON recebido de uma API;
+- Dados de funcionários;
+- Registros de estoque;
+- Resultados de uma pesquisa.
 
 Um arquivo `vendas_2026.csv`, por exemplo, poderia ter:
 
@@ -70,19 +72,24 @@ A ideia do projeto é facilitar esse tipo de organização: saber **quais dados 
 
 ## Funcionalidades
 
-Atualmente o DataHub possui:
+Atualmente, o DataHub possui:
 
 - CRUD completo de categorias;
 - CRUD completo de datasets;
-- relacionamento entre Categoria e Dataset com `ForeignKey`;
-- upload de arquivos;
-- validação da extensão do arquivo;
-- pesquisa por nome;
-- filtro por categoria;
-- filtro por formato;
-- dashboard com quantidade de categorias e datasets;
-- listagem dos datasets cadastrados recentemente;
-- interface responsiva com Bootstrap.
+- Relacionamento entre Categoria e Dataset com `ForeignKey`;
+- Upload de arquivos;
+- Validação da extensão do arquivo;
+- Pesquisa por nome;
+- Filtro por categoria;
+- Filtro por formato;
+- Dashboard com quantidade de categorias e datasets;
+- Listagem dos datasets cadastrados recentemente;
+- Cadastro e autenticação de usuários;
+- Confirmação de cadastro por e-mail;
+- Logout;
+- Proteção das páginas do catálogo para usuários não autenticados;
+- Mensagens de feedback para as operações;
+- Interface responsiva com Bootstrap.
 
 ---
 
@@ -210,10 +217,10 @@ O **TSV (Tab-Separated Values)** é parecido com CSV, mas utiliza tabulações c
 Exemplo:
 
 ```tsv
-nome	idade	cidade
-Ana	22	São Paulo
-Carlos	28	Rio de Janeiro
-Mariana	25	Fortaleza
+nome    idade    cidade
+Ana     22       São Paulo
+Carlos  28       Rio de Janeiro
+Mariana 25       Fortaleza
 ```
 
 No TSV, os valores são separados por tabulações, enquanto no CSV geralmente são separados por vírgulas.
@@ -236,6 +243,7 @@ pipeline:
 ```
 
 O YAML utiliza indentação para organizar informações hierárquicas, facilitando a leitura e a manutenção de configurações.
+
 ---
 
 ## Upload e validação de arquivos
@@ -345,12 +353,48 @@ URL
   ↓
 View
   ↓
-Model / MySQL
+Model / SQLite
   ↓
 Template
   ↓
 Navegador
 ```
+
+---
+
+## Autenticação
+
+O projeto utiliza o sistema de autenticação integrado do Django.
+
+Atualmente, a aplicação possui:
+
+- Cadastro de usuários;
+- Validação de dados de cadastro;
+- Confirmação de cadastro por e-mail;
+- Login;
+- Logout;
+- Controle de acesso às páginas do catálogo;
+- Mensagens de feedback para o usuário.
+
+A confirmação de cadastro utiliza a integração com o serviço de envio de e-mails Brevo.
+
+O Django também fornece os recursos de autenticação e gerenciamento de sessões utilizados pela aplicação.
+
+---
+
+## Banco de dados
+
+O DataHub utiliza **SQLite** como banco de dados.
+
+A configuração atual utiliza o backend `django.db.backends.sqlite3`, com o arquivo:
+
+```text
+db.sqlite3
+```
+
+O SQLite foi escolhido para simplificar a configuração e execução local do projeto, dispensando a instalação e a configuração de um servidor de banco de dados.
+
+O arquivo `db.sqlite3` é ignorado pelo Git. Portanto, ele não é enviado ao GitHub. Ao clonar o projeto, cada pessoa cria seu próprio banco executando as migrations.
 
 ---
 
@@ -360,13 +404,17 @@ O projeto utiliza:
 
 ```text
 Python 3
-Django 5.2 LTS
-MySQL 8.0
+Django 5.2.18
+SQLite
 HTML
 CSS
 Bootstrap 5
 Django Templates
 Django ORM
+Django Authentication
+Django Sessions
+Django Messages
+Brevo
 Git
 GitHub
 ```
@@ -380,24 +428,21 @@ DataHub/
 │
 ├── catalogo/
 │   ├── migrations/
-│   │
 │   ├── templates/
 │   │   └── catalogo/
 │   │       ├── categorias/
-│   │       │   ├── excluir.html
-│   │       │   ├── formulario.html
-│   │       │   └── lista.html
-│   │       │
 │   │       ├── datasets/
-│   │       │   ├── excluir.html
-│   │       │   ├── formulario.html
-│   │       │   └── lista.html
-│   │       │
 │   │       ├── base.html
 │   │       └── home.html
-│   │
 │   ├── forms.py
 │   ├── models.py
+│   ├── urls.py
+│   └── views.py
+│
+├── users/
+│   ├── migrations/
+│   ├── templates/
+│   ├── forms.py
 │   ├── urls.py
 │   └── views.py
 │
@@ -421,49 +466,40 @@ DataHub/
 └── README.md
 ```
 
-> `datahub/local_settings.py` existe apenas localmente e não faz parte do repositório.
+> A estrutura acima apresenta os principais diretórios e arquivos. `datahub/local_settings.py`, `db.sqlite3`, `.venv/` e `media/` são arquivos ou diretórios locais ignorados pelo Git.
 
 ---
 
 ## Rodando o projeto
 
-Clone o repositório:
+### 1. Clone o repositório
 
 ```bash
-git clone [https://github.com/mariaclaraferreira08/DataHub.git](https://github.com/mariaclaraferreira08/DataHub.git)
+git clone https://github.com/mariaclaraferreira08/DataHub.git
 cd DataHub
 ```
 
-Crie um ambiente virtual:
+### 2. Crie um ambiente virtual
 
 ```powershell
 py -m venv .venv
 ```
 
-Ative:
+### 3. Ative o ambiente virtual
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-Instale as dependências:
+### 4. Instale as dependências
 
 ```powershell
 python -m pip install -r requirements.txt
 ```
 
-### Banco de dados
+### 5. Configure os dados locais
 
-Crie o banco no MySQL:
-
-```sql
-CREATE DATABASE datahub
-CHARACTER SET utf8mb4;
-```
-
-### Configurações locais
-
-Por segurança, a senha do MySQL e a `SECRET_KEY` do Django não ficam armazenadas no repositório.
+Por segurança, algumas informações de configuração não ficam armazenadas no repositório.
 
 Crie o arquivo:
 
@@ -471,12 +507,17 @@ Crie o arquivo:
 datahub/local_settings.py
 ```
 
-com:
+Adicione as configurações necessárias:
 
 ```python
-DB_PASSWORD = "sua_senha_do_mysql"
 SECRET_KEY = "sua_secret_key"
+
+BREVO_API_KEY = "sua_chave_api_brevo"
+
+DEFAULT_FROM_EMAIL = "seu_email_configurado"
 ```
+
+Substitua os valores pelos seus próprios dados.
 
 Para gerar uma nova `SECRET_KEY`, execute:
 
@@ -488,15 +529,17 @@ Copie a chave gerada para `local_settings.py`.
 
 Esse arquivo está incluído no `.gitignore` e não é enviado para o GitHub.
 
----
+A integração de e-mail depende de uma chave válida da Brevo e das configurações de envio correspondentes.
 
-## Executando as migrations
+### 6. Execute as migrations
 
 ```powershell
 python manage.py migrate
 ```
 
-Depois inicie o servidor:
+Esse comando cria as tabelas necessárias no banco SQLite local.
+
+### 7. Inicie o servidor
 
 ```powershell
 python manage.py runserver
@@ -504,9 +547,7 @@ python manage.py runserver
 
 A aplicação ficará disponível em:
 
-```text
 http://127.0.0.1:8000/
-```
 
 ---
 
@@ -533,23 +574,23 @@ As rotas de edição e exclusão utilizam o ID do registro:
 
 Algumas melhorias que quero explorar futuramente:
 
-- preview de arquivos CSV, Excel e JSON;
-- análise de datasets com Pandas;
-- quantidade de linhas e colunas;
-- detecção de valores nulos e registros duplicados;
-- indicadores de qualidade de dados;
-- dashboard com gráficos;
-- autenticação;
+- Preview de arquivos CSV, Excel e JSON;
+- Análise de datasets com Pandas;
+- Quantidade de linhas e colunas;
+- Detecção de valores nulos e registros duplicados;
+- Indicadores de qualidade de dados;
+- Dashboard com gráficos;
+- Gerenciamento de dados por usuário;
 - API REST;
-- registro de pipelines;
-- armazenamento em nuvem;
+- Registro de pipelines;
+- Armazenamento em nuvem;
 - Docker.
 
 Uma possível evolução:
 
 ```text
 DataHub vAlpha ✓
-Catálogo + CRUD + Upload
+Catálogo + CRUD + Upload + Autenticação
         ↓
 DataHub v2 ◌
 Preview dos arquivos
@@ -583,11 +624,17 @@ Forms
 Views
 Templates
 Migrations
-MySQL
+SQLite
+Migração de banco de dados
 Upload de arquivos
 Validação
 Busca e filtros
+Autenticação
+Sessões
+Mensagens
+Integração com API de e-mail
 Organização de um projeto Django
+Git e GitHub
 ```
 
 ---
@@ -596,7 +643,7 @@ Organização de um projeto Django
 
 **Maria Clara Ferreira Alves**
 
-Estudante de **Análise e Desenvolvimento de Sistemas**.
+Tecnólogo em Análise e Desenvolvimento de Sistemas em formação.
 
 ---
 
@@ -604,4 +651,4 @@ Estudante de **Análise e Desenvolvimento de Sistemas**.
 
 **Funcional e em desenvolvimento.**
 
-A versão atual possui CRUD de Categorias e Datasets, integração com MySQL, upload e validação de arquivos, busca, filtros e dashboard.
+A versão atual possui CRUD de Categorias e Datasets, relacionamento entre os modelos, upload e validação de arquivos, busca, filtros, dashboard, autenticação de usuários e banco de dados SQLite.
