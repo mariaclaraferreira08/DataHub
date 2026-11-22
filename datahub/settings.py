@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from .local_settings import (
     SECRET_KEY,
-    DB_PASSWORD,
     BREVO_API_KEY,
     DEFAULT_FROM_EMAIL,
 )
@@ -27,11 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Local settings
 # Sensitive information is stored in datahub/local_settings.py.
-try:
-    from .local_settings import DB_PASSWORD
-except ImportError:
-    DB_PASSWORD = ""
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY is loaded from local_settings.py.
@@ -90,18 +84,12 @@ WSGI_APPLICATION = 'datahub.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'datahub',
-        'USER': 'root',
-        'PASSWORD': DB_PASSWORD,
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
