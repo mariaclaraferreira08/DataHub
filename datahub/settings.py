@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from .local_settings import SECRET_KEY
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,11 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Local settings
 # Sensitive information is stored in datahub/local_settings.py.
-try:
-    from .local_settings import DB_PASSWORD
-except ImportError:
-    DB_PASSWORD = ""
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY is loaded from local_settings.py.
@@ -48,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'catalogo',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +62,7 @@ ROOT_URLCONF = 'datahub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,18 +79,12 @@ WSGI_APPLICATION = 'datahub.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'datahub',
-        'USER': 'root',
-        'PASSWORD': DB_PASSWORD,
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -142,3 +133,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Login
+
+LOGIN_URL = 'users:signin'

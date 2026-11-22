@@ -1,0 +1,1 @@
+SECRET_KEY = 'coloque-sua-secret-key-aqui'
